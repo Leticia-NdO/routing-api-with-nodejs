@@ -3,7 +3,7 @@ import { RoutePointWithSequence } from '../../domain/models/route-point-with-seq
 import { HttpRequest } from '../protocols'
 import { RouteController } from './route-controller'
 import { ApproximateRouteCreator } from '../../data/protocols/approximate-route-creator'
-import { InvalidParamError } from '../errors'
+import { InvalidParamError, MissingParamError } from '../errors'
 import { serverError } from './route-controller-protocols'
 
 interface SutTypes {
@@ -109,7 +109,19 @@ describe('Routecontroller', () => {
     const response = await sut.handle(fakeHttpRequest)
 
     expect(response.statusCode).toEqual(400)
-    expect(response.body).toEqual(new InvalidParamError('Staring Point', 5))
+    expect(response.body).toEqual(new InvalidParamError('Starting Point', 5))
+  })
+
+  it('Should return 400 if starting point id is not provided', async () => {
+    const { sut } = makeSut()
+    const fakeHttpRequest = makeFakeRouteRequest()
+
+    delete fakeHttpRequest.body.startingPointId
+
+    const response = await sut.handle(fakeHttpRequest)
+
+    expect(response.statusCode).toEqual(400)
+    expect(response.body).toEqual(new MissingParamError('Starting Point'))
   })
 
   it('Should return 500 if ApproximateRouteCreator throws', async () => {
