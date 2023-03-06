@@ -4,7 +4,7 @@ import { HttpRequest } from '../protocols'
 import { RouteController } from './route-controller'
 import { ApproximateRouteCreator } from '../../data/protocols/approximate-route-creator'
 import { InvalidParamError } from '../errors'
-import { serverError } from '../middlewares/auth-middleware-protocols'
+import { serverError } from './route-controller-protocols'
 
 interface SutTypes {
   sut: RouteController
@@ -46,8 +46,10 @@ const makeFakeRouteRequest = (): HttpRequest => {
           lat: -1.666,
           lon: -1.666
         }
-      ]
+      ],
+      startingPointId: 1
     }
+
   }
 }
 
@@ -79,7 +81,7 @@ describe('Routecontroller', () => {
 
     await sut.handle(makeFakeRouteRequest())
 
-    expect(calculateSpy).toHaveBeenCalledWith(makeFakeRouteRequest().body.coordinates)
+    expect(calculateSpy).toHaveBeenCalledWith(makeFakeRouteRequest().body.coordinates, makeFakeRouteRequest().body.startingPointId)
   })
 
   it('Should return 400 if invalid coordinates are provided', async () => {
@@ -116,6 +118,6 @@ describe('Routecontroller', () => {
     const res = await sut.handle(makeFakeRouteRequest())
 
     expect(res.statusCode).toEqual(200)
-    expect(res.body).toEqual(makeFakeRoute())
+    expect(res.body.data).toEqual(makeFakeRoute())
   })
 })
