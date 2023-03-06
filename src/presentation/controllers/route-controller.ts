@@ -1,5 +1,5 @@
 import { ApproximateRouteCreator } from '../../data/protocols/approximate-route-creator'
-import { badRequest, ok, serverError, Controller, HttpRequest, HttpResponse, InvalidParamError } from './route-controller-protocols'
+import { badRequest, ok, serverError, Controller, HttpRequest, HttpResponse, InvalidParamError, MissingParamError } from './route-controller-protocols'
 
 export class RouteController implements Controller {
   constructor (private readonly approximateRouteCreator: ApproximateRouteCreator) {}
@@ -9,8 +9,12 @@ export class RouteController implements Controller {
       const { coordinates, startingPointId } = httpRequest.body
       console.time(`route calculation of ${coordinates.length as number}`)
 
+      if (!startingPointId) {
+        return badRequest(new MissingParamError('Starting Point'))
+      }
+
       if (!coordinates.find(point => point.id === startingPointId)) {
-        return badRequest(new InvalidParamError('Staring Point', startingPointId))
+        return badRequest(new InvalidParamError('Starting Point', startingPointId))
       }
 
       for (const coordinate of coordinates) {
