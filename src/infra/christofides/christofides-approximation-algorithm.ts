@@ -8,21 +8,21 @@ export class ChristofidesApproximationAlgorithm implements ApproximationAlgorith
   private vertices: Map<number, ChristofidesVertex> = new Map()
   private time = 0
 
-  getRoute (spanningTree: CoordinatesWithDistance[]): RoutePointWithSequence[] {
+  getRoute (spanningTree: CoordinatesWithDistance[], startingPointId: number): RoutePointWithSequence[] {
     this.spanningTree = spanningTree
     this.generateVertices(spanningTree)
-    this.createChristofiderGraph()
+    this.createChristofiderGraph(startingPointId)
 
     const vertices = this.getVertices()
     return this.getFinalSequence(vertices)
   }
 
-  private createChristofiderGraph (): void {
+  private createChristofiderGraph (startingPointId: number): void {
     const oddVertices = this.getOddVertices()
     const minimumWeightMatching = this.getMinimumWeightMatching(oddVertices)
     this.spanningTree = this.spanningTree.concat(minimumWeightMatching)
     this.generateVertices(this.spanningTree)
-    this.depthFirstSearch(this.vertices.get(1)!) // aqui colocamos o id do ponto inicial
+    this.depthFirstSearch(this.vertices.get(startingPointId)!) // aqui colocamos o id do ponto inicial
   }
 
   private generateVertices (spanningTree: CoordinatesWithDistance[]): void {
@@ -67,7 +67,7 @@ export class ChristofidesApproximationAlgorithm implements ApproximationAlgorith
 
   private getOddVertices (): ChristofidesVertex[] {
     const possibleStartingIds: ChristofidesVertex[] = []
-    for (const [key, value] of this.vertices) {
+    for (const value of this.vertices.values()) {
       if (value.getNeighbors().length % 2 !== 0) {
         possibleStartingIds.push(value)
       }
@@ -142,7 +142,7 @@ export class ChristofidesApproximationAlgorithm implements ApproximationAlgorith
     const finalRoute: RoutePointWithSequence[] = []
     let sequence = 0
     const sortedMap = new Map([...verticesMap.entries()].sort((a, b) => a[1].getDiscoveryTime() - b[1].getDiscoveryTime()))
-    for (const [key, value] of sortedMap) {
+    for (const value of sortedMap.values()) {
       finalRoute.push({
         coordinates: value.getCoordinates(),
         sequence: sequence += 1

@@ -23,7 +23,8 @@ describe('Routing Routes', () => {
                 lat: -23.672328669654295,
                 lon: -46.675916886341575
               }
-            ]
+            ],
+            startingPointId: 1
           }
         )
         .expect(200)
@@ -48,7 +49,8 @@ describe('Routing Routes', () => {
               lat: -23.672328669654295,
               lon: -46.675916886341575
             }
-          ]
+          ],
+          startingPointId: 1
         })
         .expect(400)
     })
