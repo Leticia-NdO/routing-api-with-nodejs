@@ -116,8 +116,8 @@ describe('TwoThirdsApproximationRouteMaker', () => {
     const { sut, spanningTreeMakerStub } = makeSut()
 
     const getSpy = jest.spyOn(spanningTreeMakerStub, 'getTree')
-
-    await sut.calculateRoute(makeFakeRouteRequest())
+    const startingPoint = 1
+    await sut.calculateRoute(makeFakeRouteRequest(), startingPoint)
 
     expect(getSpy).toHaveBeenCalledWith(makeFakeRouteRequest())
   })
@@ -126,10 +126,10 @@ describe('TwoThirdsApproximationRouteMaker', () => {
     const { sut, approximationAlgorithmStub } = makeSut()
 
     const getSpy = jest.spyOn(approximationAlgorithmStub, 'getRoute')
+    const startingPoint = 1
+    await sut.calculateRoute(makeFakeRouteRequest(), startingPoint)
 
-    await sut.calculateRoute(makeFakeRouteRequest())
-
-    expect(getSpy).toHaveBeenCalledWith(makeFakeSpanningTree())
+    expect(getSpy).toHaveBeenCalledWith(makeFakeSpanningTree(), startingPoint)
   })
 
   it('Should throw if SpanningTreeMaker throws', async () => {
@@ -138,8 +138,9 @@ describe('TwoThirdsApproximationRouteMaker', () => {
     jest.spyOn(spanningTreeMakerStub, 'getTree').mockReturnValueOnce(new Promise((resolve, reject) => {
       reject(new Error())
     }))
+    const startingPoint = 1
 
-    const response = sut.calculateRoute(makeFakeRouteRequest())
+    const response = sut.calculateRoute(makeFakeRouteRequest(), startingPoint)
 
     await expect(response).rejects.toThrow()
   })
@@ -150,16 +151,18 @@ describe('TwoThirdsApproximationRouteMaker', () => {
     jest.spyOn(approximationAlgorithmStub, 'getRoute').mockImplementationOnce(() => {
       throw new Error()
     })
+    const startingPoint = 1
 
-    const response = sut.calculateRoute(makeFakeRouteRequest())
+    const response = sut.calculateRoute(makeFakeRouteRequest(), startingPoint)
 
     await expect(response).rejects.toThrow()
   })
 
   it('Should return a route on success', async () => {
     const { sut } = makeSut()
+    const startingPoint = 1
 
-    const response = await sut.calculateRoute(makeFakeRouteRequest())
+    const response = await sut.calculateRoute(makeFakeRouteRequest(), startingPoint)
 
     expect(response).toEqual(makeFakeRoute())
   })
