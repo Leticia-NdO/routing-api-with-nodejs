@@ -7,7 +7,7 @@ export class RouteController implements Controller {
   async handle (httpRequest: HttpRequest): Promise<HttpResponse> {
     try {
       const { coordinates, startingPointId } = httpRequest.body
-      console.time(`route calculation of ${coordinates.length as number}`)
+      console.time(`Route calculation of ${coordinates.length as number} points`)
 
       if (!startingPointId) {
         return badRequest(new MissingParamError('Starting Point'))
@@ -28,7 +28,7 @@ export class RouteController implements Controller {
       }
 
       const approximatedRoute = await this.approximateRouteCreator.calculateRoute(coordinates, startingPointId)
-      console.timeEnd('route calculation')
+      console.timeEnd(`Route calculation of ${coordinates.length as number} points`)
       return ok(approximatedRoute)
     } catch (error) {
       return serverError(error)
