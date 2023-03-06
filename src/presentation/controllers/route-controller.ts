@@ -9,6 +9,10 @@ export class RouteController implements Controller {
       const { coordinates, startingPointId } = httpRequest.body
       console.time(`route calculation of ${coordinates.length as number}`)
 
+      if (!coordinates.find(point => point.id === startingPointId)) {
+        return badRequest(new InvalidParamError('Staring Point', startingPointId))
+      }
+
       for (const coordinate of coordinates) {
         if (coordinate.lat < -90 || coordinate.lat > 90) {
           return badRequest(new InvalidParamError('lat', coordinate.id))
