@@ -100,6 +100,18 @@ describe('Routecontroller', () => {
     expect(response.body).toEqual(new InvalidParamError('lat', 1))
   })
 
+  it('Should return 400 if provided starting point id does not exist in provided coordinates list', async () => {
+    const { sut } = makeSut()
+    const fakeHttpRequest = makeFakeRouteRequest()
+
+    fakeHttpRequest.body.startingPointId = 5
+
+    const response = await sut.handle(fakeHttpRequest)
+
+    expect(response.statusCode).toEqual(400)
+    expect(response.body).toEqual(new InvalidParamError('Staring Point', 5))
+  })
+
   it('Should return 500 if ApproximateRouteCreator throws', async () => {
     const { sut, approximateRouteCreatorStub } = makeSut()
 
