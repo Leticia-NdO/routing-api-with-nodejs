@@ -148,6 +148,12 @@ export class ChristofidesApproximationAlgorithm implements ApproximationAlgorith
         sequence: sequence += 1
       })
     }
+
+    this.cleanVertices()
     return finalRoute
+  }
+
+  private cleanVertices (): void {
+    this.vertices = new Map()
   }
 }

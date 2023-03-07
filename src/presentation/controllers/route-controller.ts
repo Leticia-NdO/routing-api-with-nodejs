@@ -26,7 +26,6 @@ export class RouteController implements Controller {
           return badRequest(new InvalidParamError('lon', coordinate.id))
         }
       }
-
       const approximatedRoute = await this.approximateRouteCreator.calculateRoute(coordinates, startingPointId)
       console.timeEnd(`Route calculation of ${coordinates.length as number} points`)
       return ok(approximatedRoute)

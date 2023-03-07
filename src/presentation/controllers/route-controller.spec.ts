@@ -45,6 +45,11 @@ const makeFakeRouteRequest = (): HttpRequest => {
           id: 2,
           lat: -1.666,
           lon: -1.666
+        },
+        {
+          id: 3,
+          lat: -1.777,
+          lon: -1.777
         }
       ],
       startingPointId: 1
