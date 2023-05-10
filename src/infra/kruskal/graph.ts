@@ -4,50 +4,47 @@ import { CoordinatesWithDistance } from '../../domain/models/coordinates-with-di
 import { getDistanceBetweenTwoPoints } from '../helpers/get-distance-between-two-points'
 
 export class Graph {
-  private readonly edges: CoordinatesWithDistance[]
+  private readonly edges: CoordinatesWithDistance[] // Array to store the edges between nodes
   constructor (private readonly nodes: Coordinate[]) {
     const routes: CoordinatesWithDistance[] = []
 
-    // transforma as coordenadas em CoordinatesWithDistance, tira as distancias iguais a 0 e distâncias repetidas
+    // Generate edges between all nodes
     for (let k = 0; k < nodes.length; k++) {
       const origin = nodes[k]
       for (let w = 0; w < nodes.length; w++) {
         const destiny = nodes[w]
         const distanceBetweenTwoPoints = getDistanceBetweenTwoPoints(origin, destiny)
-        if (distanceBetweenTwoPoints.distance === 0) continue // if the origin and destiny are the same
-        // routes = routes.filter( obj => {
-        //   return obj.distance !== distanceBetweenTwoPoints.distance
-        // })
+        if (distanceBetweenTwoPoints.distance === 0) continue // Skip edges with distance 0 (same origin and destiny)
         routes.push(distanceBetweenTwoPoints)
       }
     }
 
-    this.edges = routes.sort((a, b) => a.distance - b.distance)
+    this.edges = routes.sort((a, b) => a.distance - b.distance) // Sort the edges by distance
   }
 
   addEdge (edge: CoordinatesWithDistance): void {
-    this.edges.push(edge)
+    this.edges.push(edge) // Add an edge to the graph
     if (!this.nodes.includes(edge.source)) {
-      this.nodes.push(edge.source)
+      this.nodes.push(edge.source) // Add the source node to the graph if it doesn't exist
     }
     if (!this.nodes.includes(edge.destination)) {
-      this.nodes.push(edge.destination)
+      this.nodes.push(edge.destination) // Add the destination node to the graph if it doesn't exist
     }
   }
 
   getEdge (index: number): CoordinatesWithDistance {
-    return this.edges[index]
+    return this.edges[index] // Get the edge at the specified index
   }
 
   getEdges (): CoordinatesWithDistance[] {
-    return this.edges
+    return this.edges // Get all edges in the graph
   }
 
   getNodes (): Coordinate[] {
-    return this.nodes
+    return this.nodes // Get all nodes in the graph
   }
 
-  // get the root of node
+  // Find the parent/root of a node using path compression
   findParent (subsets: Map<Coordinate, NodeParents>, node: Coordinate): Coordinate {
     const nodeInfo = subsets.get(node)
     if (nodeInfo && nodeInfo.parent !== node) {
@@ -56,7 +53,7 @@ export class Graph {
     return nodeInfo!.parent
   }
 
-  // unite the x and y subsets based on rank
+  // Union of two subsets based on rank
   union (subsets: Map<Coordinate, NodeParents>, nodeOne: Coordinate, nodeTwo: Coordinate): void {
     const nodeOneRoot = this.findParent(subsets, nodeOne)
     const nodeTwoRoot = this.findParent(subsets, nodeTwo)
