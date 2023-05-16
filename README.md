@@ -109,19 +109,19 @@ The response body contains a **data** property, which is an array of objects rep
 
 This API consists of several classes and algorithms that work together to create approximate routes for a given set of coordinates. Here's a brief description of the API and the algorithms used:
 
-* **Graph**: The Graph class represents a graph data structure that is used to model the connections between the coordinates. It contains methods for adding edges, retrieving edges and nodes, and performing operations on the graph.
+* **Graph**: The Graph class represents a graph data structure that is used to model the connections between the coordinates. It contains methods for adding edges, retrieving edges and nodes, and performing operations on the graph;
 
-* **ChristofidesVertex**: The ChristofidesVertex class represents a vertex in the graph. It contains information such as its neighbors, discovery and finish times, and color. It also has methods for adding neighbors and retrieving vertex properties.
+* **ChristofidesVertex**: The ChristofidesVertex class represents a vertex in the graph. It contains information such as its neighbors, discovery and finish times, and color. It also has methods for adding neighbors and retrieving vertex properties;
 
-* **CoordinatesWithDistance**: The CoordinatesWithDistance class represents a pair of coordinates along with the distance between them. It is used to store the edges of the graph, with each edge representing a connection between two coordinates.
+* **CoordinatesWithDistance**: The CoordinatesWithDistance class represents a pair of coordinates along with the distance between them. It is used to store the edges of the graph, with each edge representing a connection between two coordinates;
 
-* **NodeParents**: The NodeParents interface defines the structure of a node in the graph, including its parent and rank. It is used in the Kruskal's algorithm for finding the parent of a node and performing union operations.
+* **NodeParents**: The NodeParents interface defines the structure of a node in the graph, including its parent and rank. It is used in the Kruskal's algorithm for finding the parent of a node and performing union operations;
 
-* **SpanningTreeMaker**: The SpanningTreeMaker interface defines the contract for a spanning tree maker, which is responsible for generating a minimum spanning tree from a given set of coordinates. It includes the getTree method, which returns the minimum spanning tree as an array of CoordinatesWithDistance.
+* **SpanningTreeMaker**: The SpanningTreeMaker interface defines the contract for a spanning tree maker, which is responsible for generating a minimum spanning tree from a given set of coordinates. It includes the getTree method, which returns the minimum spanning tree as an array of CoordinatesWithDistance;
 
-* **KrustalSpanningTree**: The KrustalSpanningTree class implements the SpanningTreeMaker interface and uses Kruskal's algorithm to generate a minimum spanning tree. It iterates over the edges of the graph, adding edges that do not create cycles until it forms a spanning tree.
+* **KrustalSpanningTree**: The KrustalSpanningTree class implements the SpanningTreeMaker interface and uses Kruskal's algorithm to generate a minimum spanning tree. It iterates over the edges of the graph, adding edges that do not create cycles until it forms a spanning tree;
 
-* **ApproximationAlgorithm**: The ApproximationAlgorithm interface defines the contract for an approximation algorithm used to calculate an approximate route based on a minimum spanning tree. It includes the getRoute method, which takes the minimum spanning tree and a starting point ID, and returns an approximate route as an array of CoordinatesWithDistance.
+* **ApproximationAlgorithm**: The ApproximationAlgorithm interface defines the contract for an approximation algorithm used to calculate an approximate route based on a minimum spanning tree. It includes the getRoute method, which takes the minimum spanning tree and a starting point ID, and returns an approximate route as an array of CoordinatesWithDistance;
 
 * **TwoThirdsApproximationRouteMaker**: The TwoThirdsApproximationRouteMaker class implements the ApproximateRouteCreator interface and uses a two-thirds approximation algorithm to calculate an approximate route. It takes an instance of the SpanningTreeMaker and ApproximationAlgorithm as dependencies and uses them to generate a minimum spanning tree and calculate the approximate route.
 
