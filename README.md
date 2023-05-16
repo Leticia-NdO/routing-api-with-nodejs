@@ -26,10 +26,86 @@ Make sure to open a terminal on the project's directory and then run:
 ```bash
 $ docker-compose up --build
 ```
-
 And that's it! The API must be running on port 5050.
 
-### Technical notes
+### Usage
+
+POST /api/v1/route
+
+Example request body:
+
+```json
+{
+	"coordinates": [
+		{
+			"id": 1,
+			"lat": -23.606997872564072,
+			"lon": -46.76229420947422
+		},
+		{
+			"id": 2,
+			"lat": -23.655728956536628, 
+			"lon": -46.69302839465839
+		},
+		{
+			"id": 3,
+			"lat": -23.672328669654295, 
+			"lon": -46.675916886341575
+		}
+	],
+	"startingPointId": 3
+}
+```
+
+1. **coordinates** is an array that represents the list of coordinates to be used for route planning. Each coordinate object within the array contains the following properties:
+  * id: An identifier for the coordinate. It uniquely identifies each coordinate in the list. Must be a number;
+  * lat: The latitude value of the coordinate's geographical location. It specifies the north-south position on the Earth's surface;
+  * lon: The longitude value of the coordinate's geographical location. It specifies the east-west position on the Earth's surface.
+
+2. **startingPointId** is the property that specifies the identifier of the starting point for the route. It indicates which coordinate in the "coordinates" array should be considered as the starting point for the route calculation. The API will generate a route that starts from this point and connects the remaining coordinates in an optimized manner.
+
+&nbsp;
+
+Example response:
+
+```json
+{
+	"data": [
+		{
+			"coordinates": {
+				"id": 3,
+				"lat": -23.672328669654295,
+				"lon": -46.675916886341575
+			},
+			"sequence": 1
+		},
+		{
+			"coordinates": {
+				"id": 2,
+				"lat": -23.655728956536628,
+				"lon": -46.69302839465839
+			},
+			"sequence": 2
+		},
+		{
+			"coordinates": {
+				"id": 1,
+				"lat": -23.606997872564072,
+				"lon": -46.76229420947422
+			},
+			"sequence": 3
+		}
+	]
+}
+```
+
+The response body contains a **data** property, which is an array of objects representing the calculated route. Each object in the array consists of the following properties:
+
+1. **coordinates** is a property that represents a coordinate along the calculated route. It's identical to the coordinate object from the request.
+
+2. **sequence** ia a property that indicates the sequence or order of the coordinate within the route. It specifies the position of the coordinate in the overall route. The coordinates are ordered based on the optimized route calculated by the API.
+
+## Technical notes
 
 This API consists of several classes and algorithms that work together to create approximate routes for a given set of coordinates. Here's a brief description of the API and the algorithms used:
 
@@ -50,3 +126,7 @@ This API consists of several classes and algorithms that work together to create
 * **TwoThirdsApproximationRouteMaker**: The TwoThirdsApproximationRouteMaker class implements the ApproximateRouteCreator interface and uses a two-thirds approximation algorithm to calculate an approximate route. It takes an instance of the SpanningTreeMaker and ApproximationAlgorithm as dependencies and uses them to generate a minimum spanning tree and calculate the approximate route.
 
 The API utilizes the Kruskal's algorithm for generating a minimum spanning tree, which ensures that all coordinates are connected with the minimum total distance. Then, it applies an approximation algorithm (in this case, a two-thirds approximation) to calculate an approximate route based on the minimum spanning tree. The resulting approximate route provides a reasonable solution for routing the given coordinates.
+
+## Stay in touch
+
+- Author - [Leticia Neves de Oliveira](https://www.linkedin.com/in/leticia-neves-dev/)
