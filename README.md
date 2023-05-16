@@ -29,8 +29,6 @@ $ docker-compose up --build
 
 And that's it! The API must be running on port 5050.
 
-## Usage
-
 ### Technical notes
 
 This API consists of several classes and algorithms that work together to create approximate routes for a given set of coordinates. Here's a brief description of the API and the algorithms used:
