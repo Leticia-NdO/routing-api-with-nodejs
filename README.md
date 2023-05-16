@@ -30,7 +30,7 @@ And that's it! The API must be running on port 5050.
 
 ### Usage
 
-POST /api/v1/route
+#### POST /api/v1/route
 
 Example request body:
 
